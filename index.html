@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clean Smiles Dental — Self-Hosted Platform · Proposal</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#F4F6F8;--bg-2:#EBEFF2;--surface:#FFFFFF;
+    --ink:#0B1418;--ink-2:#44535C;--ink-3:#7C8B94;
+    --line:rgba(11,20,24,.08);--line-2:rgba(11,20,24,.12);
+    --teal:#0FA98E;--teal-deep:#0A7D6A;--teal-ink:#0a4f43;
+    --t-ess:#0FA98E;--t-pro:#5457E5;--t-com:#D98A1E;--t-add:#8a6cb0;
+    --pf-web:#2563EB;--pf-app:#16A34A;--pf-both:#7C3AED;
+    --r-lg:26px;--r-md:18px;
+    --ease:cubic-bezier(.32,.72,0,1);
+    --shadow-card:0 18px 40px -26px rgba(8,38,40,.22),0 3px 12px -8px rgba(8,38,40,.10);
+    --maxw:1160px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(55% 45% at 85% 0%,rgba(15,169,142,.09),transparent 60%),radial-gradient(50% 40% at 0% 8%,rgba(15,169,142,.06),transparent 60%)}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:'Clash Display','Plus Jakarta Sans',sans-serif;font-weight:600;letter-spacing:-.02em;line-height:1.05;color:var(--ink)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  section{padding:clamp(3.2rem,6vw,5rem) 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--teal-deep);background:rgba(15,169,142,.09);border:1px solid rgba(15,169,142,.18);padding:6px 13px;border-radius:999px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+  /* nav */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:center;padding:14px 14px}
+  .nav-pill{display:flex;align-items:center;gap:20px;width:min(var(--maxw),100%);padding:9px 10px 9px 18px;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 34px -22px rgba(8,38,40,.3),inset 0 1px 0 rgba(255,255,255,.7)}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px;white-space:nowrap}
+  .mark{width:25px;height:25px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;color:#fff;font-family:'Clash Display';font-weight:600;font-size:13px}
+  .nav-links{display:flex;align-items:center;gap:22px;margin-left:auto;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--ink);color:#fff;padding:8px 8px 8px 16px;border-radius:999px;font-size:13px;font-weight:600;transition:transform .35s var(--ease)}
+  .nav-cta:hover{transform:translateY(-1px)}
+  .nav-cta .ic{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);display:grid;place-items:center}
+  .burger{display:none;flex-direction:column;gap:5px;width:40px;height:40px;border-radius:50%;background:var(--ink);cursor:pointer;align-items:center;justify-content:center;margin-left:auto}
+  .burger span{width:16px;height:1.7px;background:#fff;border-radius:2px;transition:transform .4s var(--ease),opacity .3s}
+  .mobile-menu{position:fixed;inset:0;z-index:39;background:rgba(244,246,248,.92);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);display:flex;flex-direction:column;justify-content:center;gap:4px;padding:0 30px;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+  .mobile-menu.open{opacity:1;pointer-events:auto}
+  .mobile-menu a{font-family:'Clash Display';font-size:clamp(1.8rem,8vw,2.6rem);font-weight:500;padding:6px 0}
+
+  /* hero */
+  .hero{padding-top:clamp(7rem,14vh,9.5rem);padding-bottom:clamp(2rem,4vw,3rem);text-align:center}
+  .hero h1{font-size:clamp(2.5rem,6.4vw,4.8rem);margin:22px auto 0;max-width:16ch}
+  .hero h1 em{font-style:normal;color:var(--teal-deep)}
+  .lede{max-width:60ch;margin:20px auto 0;font-size:clamp(1rem,1.5vw,1.18rem);color:var(--ink-2)}
+  .ctas{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 14px 13px 22px;border-radius:999px;font-weight:600;font-size:14.5px;transition:transform .35s var(--ease),box-shadow .35s var(--ease);cursor:pointer;border:none}
+  .btn .ic{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;transition:transform .4s var(--ease)}
+  .btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;box-shadow:0 14px 30px -14px rgba(10,125,106,.6)}
+  .btn-primary .ic{background:rgba(255,255,255,.18)}
+  .btn-primary:hover{transform:translateY(-2px)}.btn-primary:hover .ic{transform:translate(3px,-1px)}
+  .btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line-2);box-shadow:var(--shadow-card)}
+  .btn-ghost .ic{background:var(--bg-2)}
+  .btn-ghost:hover{transform:translateY(-2px)}.btn-ghost:hover .ic{transform:translate(3px,-1px)}
+  .trust{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .trust .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--ink-2);background:rgba(255,255,255,.7);border:1px solid var(--line);padding:7px 14px;border-radius:999px}
+  .trust .chip b{color:var(--ink);font-weight:600}
+
+  /* section head */
+  .sec-head{max-width:58ch}
+  .sec-head.center{margin:0 auto;text-align:center}
+  .sec-head h2{font-size:clamp(1.7rem,3.6vw,2.6rem);margin-top:14px}
+  .sec-head p{margin-top:12px;color:var(--ink-2);font-size:clamp(.97rem,1.4vw,1.08rem)}
+
+  .bezel{background:rgba(11,20,24,.035);border:1px solid var(--line);border-radius:var(--r-lg);padding:6px;box-shadow:var(--shadow-card)}
+  .bezel>.core{background:var(--surface);border-radius:calc(var(--r-lg) - 6px);box-shadow:inset 0 1px 1px rgba(255,255,255,.7);height:100%}
+
+  /* integration */
+  .modes{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:32px}
+  .mode .core{padding:20px}
+  .mode.rec{background:linear-gradient(135deg,rgba(15,169,142,.18),rgba(10,125,106,.1));border-color:rgba(15,169,142,.3)}
+  .mode.rec .core{background:linear-gradient(180deg,#fff,#f5fffd)}
+  .mode h3{font-size:1.05rem;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .mode .ol{margin-top:8px;font-size:12.5px;color:var(--ink-2);min-height:54px}
+  .mode .stats{margin-top:12px;border-top:1px solid var(--line);padding-top:11px;display:flex;flex-direction:column;gap:7px}
+  .mode .stats div{display:flex;justify-content:space-between;font-size:12px;gap:8px}
+  .mode .stats .k{color:var(--ink-3)}.mode .stats .v{font-weight:600;text-align:right}
+  .v.yes{color:var(--teal-deep)}.v.no{color:#b06a4f}
+  .rec-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#fff;background:var(--teal-deep);padding:2px 8px;border-radius:999px}
+  .startpoint{margin-top:26px;display:flex;flex-direction:column;gap:8px}
+  .sp-row{display:flex;align-items:center;gap:12px;font-size:13.5px;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+  .sp-tag{font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 11px;border-radius:999px;flex-shrink:0;min-width:74px;text-align:center}
+  .sp-tag.read{background:rgba(15,169,142,.13);color:var(--teal-ink)}
+  .sp-tag.write{background:rgba(176,106,79,.14);color:#9a4f33}
+  .note{margin-top:14px;display:flex;gap:14px;align-items:flex-start;padding:20px 22px;border-radius:var(--r-md);background:linear-gradient(135deg,#0c2b27,#0a201d);color:rgba(255,255,255,.9)}
+  .note svg{width:22px;height:22px;color:var(--teal);flex-shrink:0;margin-top:2px}
+  .note p{font-size:14.5px;line-height:1.5}.note b{color:#fff}
+
+  /* pricing */
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px;align-items:stretch}
+  .tier{position:relative}
+  .tier .core{padding:28px 24px 26px;display:flex;flex-direction:column;height:100%;position:relative;overflow:hidden}
+  .tier .core::before{content:"";position:absolute;top:0;left:0;right:0;height:5px}
+  .tier.e1 .core::before{background:var(--t-ess)}.tier.e2 .core::before{background:#8b8eff}.tier.e3 .core::before{background:var(--t-com)}
+  .tier.e1 .core{background:linear-gradient(180deg,#fff,#f2fffb)}
+  .tier.e3 .core{background:linear-gradient(180deg,#fff,#fffaf1)}
+  .tier.e1 .tname{color:var(--t-ess)}.tier.e3 .tname{color:var(--t-com)}
+  .tier.e1 .feat-list svg{color:var(--t-ess)}.tier.e3 .feat-list svg{color:var(--t-com)}
+  .tier.feat .core{background:linear-gradient(180deg,#23265f,#181a44);color:#fff}
+  .tier.feat{background:linear-gradient(150deg,rgba(84,87,229,.5),rgba(60,62,160,.32))}
+  .tier.feat h3,.tier.feat .price{color:#fff}
+  .tier.feat .h{color:rgba(255,255,255,.74)}
+  .tier.feat .feat-list li{color:rgba(255,255,255,.85)}
+  .tier.feat .feat-list svg{color:#9fa2ff}
+  .tier.feat .meta{border-color:rgba(255,255,255,.16)}.tier.feat .meta span{color:rgba(255,255,255,.6)}
+  .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--t-pro);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;z-index:3;box-shadow:0 8px 20px -8px rgba(84,87,229,.7)}
+  .tier .tname{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--teal-deep)}
+  .tier.feat .tname{color:#9fa2ff}
+  .tier h3{font-size:1.45rem;margin-top:8px}
+  .tier .h{font-size:13.5px;color:var(--ink-2);margin-top:7px;min-height:54px}
+  .tier .price{font-family:'Clash Display';font-size:1.9rem;font-weight:600;margin-top:14px}
+  .tier .price .once{font-size:.5rem;font-weight:700;color:var(--ink-3);font-family:'Plus Jakarta Sans';letter-spacing:.08em;text-transform:uppercase;vertical-align:middle;margin-left:5px}
+  .tier.feat .price .once{color:rgba(255,255,255,.55)}
+  .tier .meta{display:flex;flex-direction:column;gap:5px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px}
+  .tier .meta span{color:var(--ink-3)}.tier .meta b{font-weight:600}
+  .feat-list{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:7px;flex:1}
+  .feat-list li{display:flex;gap:8px;font-size:13px;color:var(--ink-2);align-items:flex-start}
+  .feat-list svg{width:15px;height:15px;color:var(--teal-deep);flex-shrink:0;margin-top:2px}
+  .feat-list .more{font-weight:600;color:var(--ink-3);font-size:12px;padding-left:23px}
+  .tier .btn{margin-top:20px;width:100%;justify-content:center;padding-left:22px}
+  .price-note{text-align:center;margin-top:20px;font-size:12.5px;color:var(--ink-3);max-width:74ch;margin-left:auto;margin-right:auto}
+
+  /* features */
+  .filters{display:flex;flex-wrap:wrap;gap:7px;margin-top:26px;align-items:center}
+  .filters .label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin-right:4px}
+  .fbtn{font-size:12.5px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--line-2);padding:7px 13px;border-radius:999px;cursor:pointer;transition:all .3s var(--ease)}
+  .fbtn:hover{border-color:var(--teal)}
+  .fbtn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .fcount{margin-left:auto;font-size:12.5px;color:var(--ink-3);font-weight:500}
+  /* compact feature chips */
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:12px;color:var(--ink-3);font-weight:500}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend .dot{width:8px;height:8px;border-radius:50%}
+  .dot.t-ess{background:var(--t-ess)}.dot.t-pro{background:var(--t-pro)}.dot.t-com{background:var(--t-com)}.dot.t-add{background:var(--t-add)}
+  .feat-grid{margin-top:18px;column-count:3;column-gap:14px}
+  .cat-group{break-inside:avoid;-webkit-column-break-inside:avoid;display:inline-block;width:100%;margin-bottom:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 15px;box-shadow:0 10px 26px -22px rgba(8,38,40,.3)}
+  .cat-group h3{font-family:'Plus Jakarta Sans';font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:6px;padding:0 9px 8px;border-bottom:1px solid var(--line)}
+  .chips{display:flex;flex-direction:column;gap:1px;margin-top:5px}
+  .chip-f{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:8px 9px;border-radius:9px;background:none;border:none;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;transition:background .2s var(--ease)}
+  .chip-f:hover{background:var(--bg-2)}
+  .chip-f .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .chip-f .nm{flex:1;line-height:1.3}
+  .chip-f .pl{font-size:9.5px;font-weight:700;border-radius:5px;padding:2px 6px;letter-spacing:.03em;flex-shrink:0}
+  .pl.web,.tag.plat.web{background:rgba(37,99,235,.12);color:#1d4ed8}
+  .pl.app,.tag.plat.app{background:rgba(22,163,74,.14);color:#15803d}
+  .pl.both,.tag.plat.both{background:rgba(124,58,237,.12);color:#6d28d9}
+  .tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px}
+  .tag.t-ess{background:rgba(15,169,142,.13);color:#0a4f43}
+  .tag.t-pro{background:rgba(84,87,229,.14);color:#3b3eb3}
+  .tag.t-com{background:rgba(217,138,30,.16);color:#9a5f12}
+  .tag.t-add{background:rgba(138,108,176,.15);color:#6a4a8c}
+  .tag.plat{background:var(--bg-2);color:var(--ink-2)}
+  .tag.intg{background:#eef4f3;color:var(--teal-ink);cursor:help}
+
+  /* addons */
+  .addon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:30px}
+  .addon{border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);padding:18px 20px;box-shadow:0 8px 22px -20px rgba(8,38,40,.3);display:grid;grid-template-columns:1fr auto;gap:5px 16px;align-items:start}
+  .addon h4{font-size:1rem;grid-column:1}
+  .addon .pr{grid-column:2;grid-row:1;font-family:'Clash Display';font-weight:600;font-size:.9rem;color:var(--teal-deep);white-space:nowrap;text-align:right}
+  .addon p{grid-column:1 / -1;font-size:12.5px;color:var(--ink-2)}
+
+  /* notes */
+  .talk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:30px}
+  .talk{display:flex;gap:12px;padding:18px 20px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line)}
+  .talk .ic{width:30px;height:30px;border-radius:9px;background:rgba(15,169,142,.1);color:var(--teal-deep);display:grid;place-items:center;flex-shrink:0}
+  .talk .ic svg{width:16px;height:16px}
+  .talk h4{font-size:.95rem}.talk p{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+  .addon,.talk{cursor:pointer;position:relative;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+  .addon:hover,.talk:hover{transform:translateY(-3px);box-shadow:var(--shadow-card)}
+  .addon::after,.talk::after{content:"\203A";position:absolute;top:11px;right:16px;font-size:17px;line-height:1;color:var(--ink-3);opacity:.35;transition:opacity .3s,transform .3s}
+  .addon:hover::after,.talk:hover::after{opacity:1;transform:translateX(3px);color:var(--teal-deep)}
+
+  /* faq */
+  .faq{margin-top:30px;max-width:840px;margin-left:auto;margin-right:auto;display:flex;flex-direction:column;gap:9px}
+  .qa{border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);overflow:hidden}
+  .qa button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:17px 20px;background:none;border:none;cursor:pointer;text-align:left;font-family:'Clash Display';font-weight:500;font-size:1rem;color:var(--ink)}
+  .qa .pm{width:24px;height:24px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:transform .35s var(--ease),background .3s}
+  .qa.open .pm{transform:rotate(45deg);background:var(--teal);border-color:var(--teal);color:#fff}
+  .qa .ans{max-height:0;overflow:hidden;transition:max-height .45s var(--ease)}
+  .qa .ans p{padding:0 20px 18px;font-size:13.5px;color:var(--ink-2)}
+
+  /* cta */
+  .cta .core{padding:clamp(2.2rem,4.5vw,3.6rem);text-align:center;background:linear-gradient(150deg,#0c2b27,#0a201d);color:#fff;border-radius:calc(var(--r-lg) - 6px)}
+  .cta .bezel{background:rgba(15,169,142,.3);border-color:rgba(15,169,142,.3)}
+  .cta h2{color:#fff;font-size:clamp(1.7rem,3.6vw,2.5rem)}
+  .cta p{color:rgba(255,255,255,.74);max-width:56ch;margin:14px auto 0}
+  .cta .ctas{margin-top:26px}
+  .cta .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18);box-shadow:none}
+  .cta .btn-ghost .ic{background:rgba(255,255,255,.12)}
+  .email-line{margin-top:18px;font-size:14px;color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap}
+  .email-copy{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;font-family:inherit;font-size:14px;font-weight:600;padding:8px 15px;border-radius:999px;cursor:pointer;transition:background .2s var(--ease);user-select:all}
+  .email-copy:hover{background:rgba(255,255,255,.15)}
+  .email-copy svg{width:15px;height:15px;opacity:.7;pointer-events:none}
+  .copied{font-size:12.5px;color:var(--teal);font-weight:700;opacity:0;transition:opacity .3s}
+  .copied.show{opacity:1}
+  .avail{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(255,255,255,.55);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 13px;border-radius:999px}
+  .avail svg{width:14px;height:14px;color:var(--teal);flex-shrink:0}
+  .cta .steps{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin-top:34px}
+  .cta .step{max-width:190px}
+  .cta .step .n{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;margin:0 auto;font-family:'Clash Display';color:var(--teal)}
+  .cta .step h4{color:#fff;font-size:.95rem;margin-top:10px}.cta .step p{font-size:12.5px;margin-top:3px;color:rgba(255,255,255,.6)}
+
+  footer{padding:38px 0 50px;text-align:center;color:var(--ink-3);font-size:12.5px}
+  footer .fbrand{display:inline-flex;align-items:center;gap:9px;font-weight:700;color:var(--ink);font-size:14.5px;margin-bottom:8px}
+
+  /* tooltip */
+  .term{border-bottom:1.6px dotted var(--teal-deep);cursor:help;position:relative;font-weight:600;color:var(--teal-ink)}
+  .term .tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(5px);background:#0c2b27;color:#fff;font-size:12px;font-weight:400;line-height:1.45;padding:9px 12px;border-radius:11px;width:max-content;max-width:230px;opacity:0;visibility:hidden;transition:opacity .22s var(--ease),transform .22s var(--ease);z-index:60;box-shadow:0 14px 36px -12px rgba(0,0,0,.5);pointer-events:none;text-align:left;white-space:normal}
+  .term .tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#0c2b27}
+  .term:hover .tip,.term.show .tip{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+
+  /* in plain terms */
+  .plain-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+  .plain .core{padding:24px 26px}
+  .plain .hd{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+  .plain .hd .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+  .plain .hd .ic svg{width:20px;height:20px}
+  .plain.p1 .hd .ic{background:rgba(15,169,142,.12);color:var(--teal-deep)}
+  .plain.p2 .hd .ic{background:rgba(192,138,62,.14);color:#8a5d1e}
+  .plain .hd h3{font-size:1.2rem}
+  .plain .hd span{font-size:12px;color:var(--ink-3);display:block;font-family:'Plus Jakarta Sans';font-weight:500}
+  .plain ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .plain li{display:flex;gap:10px;font-size:13.5px;color:var(--ink-2);align-items:flex-start}
+  .plain li svg{width:16px;height:16px;color:var(--teal-deep);flex-shrink:0;margin-top:3px}
+
+  /* interactive modes */
+  .mode{cursor:pointer;transition:transform .3s var(--ease)}
+  .mode:hover{transform:translateY(-3px)}
+  .mode.sel{background:linear-gradient(135deg,rgba(15,169,142,.22),rgba(10,125,106,.12));border-color:var(--teal)}
+  .mode.sel .core{background:linear-gradient(180deg,#fff,#f4fffc);box-shadow:inset 0 1px 1px rgba(255,255,255,.7),0 0 0 1.5px var(--teal)}
+  .mode .pick{margin-top:12px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+  .mode.sel .pick{color:var(--teal-deep)}
+  .mode .pick .rd{width:14px;height:14px;border-radius:50%;border:1.6px solid var(--line-2);display:inline-grid;place-items:center}
+  .mode.sel .pick .rd{border-color:var(--teal);background:var(--teal)}
+  .mode.sel .pick .rd::after{content:"";width:5px;height:5px;border-radius:50%;background:#fff}
+  .mode-detail{margin-top:13px}
+  .mode-detail .core{padding:22px 24px}
+  .md-flow{display:flex;flex-direction:column;gap:10px}
+  .md-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .md-lab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);width:62px;flex-shrink:0}
+  .pill{font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;white-space:nowrap}
+  .pill.app{background:var(--ink);color:#fff}
+  .pill.good{background:rgba(15,169,142,.15);color:var(--teal-ink)}
+  .pill.api{background:var(--bg-2);color:var(--ink-2)}
+  .pill.cost{background:rgba(176,106,79,.14);color:#9a4f33}
+  .pill.none{background:rgba(176,106,79,.1);color:#9a4f33;text-decoration:line-through;opacity:.7}
+  .arrow{color:var(--ink-3);font-weight:700}
+  .md-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+  .md-badge.ok{background:rgba(15,169,142,.15);color:var(--teal-deep)}
+  .md-badge.cost{background:rgba(176,106,79,.16);color:#9a4f33}
+  .md-badge.no{background:rgba(176,106,79,.12);color:#9a4f33}
+  .md-means{margin-top:15px;padding-top:15px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);line-height:1.55}
+  .md-means b{color:var(--teal-deep)}
+
+  /* clickable feature + modal */
+  .fcard{cursor:pointer}
+  .fcard .open-hint{margin-top:11px;font-size:11px;font-weight:600;color:var(--teal-deep);opacity:0;transition:opacity .3s}
+  .fcard:hover .open-hint{opacity:1}
+  .modal{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:20px}
+  .modal.open{display:grid}
+  .modal-bg{position:absolute;inset:0;background:rgba(8,20,18,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .modal-card{position:relative;max-width:470px;width:100%;background:#fff;border-radius:24px;padding:30px;box-shadow:0 40px 90px -30px rgba(8,38,40,.5);transform:scale(.95) translateY(10px);opacity:0;transition:transform .35s var(--ease),opacity .35s var(--ease);max-height:88vh;overflow:auto}
+  .modal.open .modal-card{transform:none;opacity:1}
+  .modal-card .close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);font-size:18px;color:var(--ink-2);cursor:pointer;display:grid;place-items:center;line-height:1}
+  .modal-card .cat{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-3)}
+  .modal-card h3{font-size:1.45rem;margin-top:6px}
+  .m-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .m-what{font-size:15px;color:var(--ink);margin-top:16px;line-height:1.55}
+  .m-eg{margin-top:16px;padding:16px 18px;border-radius:14px;background:var(--bg-2)}
+  .m-eg b{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--teal-deep)}
+  .m-eg p{font-size:14px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+  .m-conn{margin-top:16px;font-size:13px;color:var(--ink-2);display:flex;gap:9px;align-items:flex-start}
+  .m-conn svg{width:17px;height:17px;color:var(--teal-deep);flex-shrink:0;margin-top:2px}
+
+  .reveal{opacity:0;transform:translateY(20px);filter:blur(5px);transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none;filter:none}
+
+  @media (max-width:960px){.modes{grid-template-columns:repeat(2,1fr)}.price-grid{grid-template-columns:1fr;max-width:460px;margin-left:auto;margin-right:auto}.addon-grid,.talk-grid,.plain-grid{grid-template-columns:1fr}.feat-grid{column-count:2}}
+  @media (max-width:640px){.nav-links,.nav-cta{display:none}.burger{display:flex}.modes{grid-template-columns:1fr}.feat-grid{column-count:1}.cta .steps{flex-direction:column;align-items:center}.md-lab{width:100%}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}.reveal{opacity:1;transform:none;filter:none}html{scroll-behavior:auto}}
+  @media print{.nav,.burger,.mobile-menu,.filters{display:none!important}body{background:#fff}body::before{display:none}.reveal{opacity:1!important;transform:none!important;filter:none!important}section{padding:18px 0;page-break-inside:avoid}.ans{max-height:none!important}.qa .ans p{padding-top:0}.fcard,.tier,.mode,.addon,.talk{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-pill">
+    <a href="#top" class="brand"><span class="mark">CS</span> Clean Smiles <span style="color:var(--ink-3);font-weight:500">· Platform</span></a>
+    <div class="nav-links">
+      <a href="#integration">How it connects</a>
+      <a href="#pricing">Tiers</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#cta" class="nav-cta">Next steps <span class="ic">→</span></a>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#integration">How it connects</a><a href="#pricing">Tiers</a><a href="#features">Features</a><a href="#faq">FAQ</a><a href="#cta">Next steps</a>
+</div>
+
+<header class="hero wrap" id="top">
+  <span class="eyebrow reveal"><span class="dot"></span> Proposal · Clean Smiles Dental</span>
+  <h1 class="reveal">Your front desk.<br><em>On your own server.</em></h1>
+  <p class="lede reveal">A web app for patient self-booking and an Android app for your team and lobby — both running on your own server against your existing OpenDental. No subscriptions. English and Spanish.</p>
+  <div class="ctas reveal">
+    <a href="#pricing" class="btn btn-primary">See the tiers <span class="ic">→</span></a>
+    <a href="#integration" class="btn btn-ghost">How it connects <span class="ic">↓</span></a>
+  </div>
+  <div class="trust reveal">
+    <span class="chip"><b>Self-hosted</b> on your Proxmox</span>
+    <span class="chip"><b>$0/mo</b> to any vendor</span>
+    <span class="chip"><b>EN / ES</b> bilingual</span>
+  </div>
+</header>
+
+<!-- IN PLAIN TERMS -->
+<section class="wrap" id="plain">
+  <div class="sec-head center reveal">
+    <span class="eyebrow"><span class="dot"></span> In plain terms</span>
+    <h2>Two apps. On your own server.</h2>
+    <p>The whole thing in one picture. Hover any <span class="term">underlined word<span class="tip">Hover or tap underlined words for a plain explanation — like this.</span></span> for a plain explanation, and tap any feature further down to see exactly what it does.</p>
+  </div>
+  <div class="plain-grid">
+    <div class="bezel plain p1 reveal"><div class="core">
+      <div class="hd"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="7" r="3"/><path d="M3 20a6 6 0 0112 0M16 6a3 3 0 010 6M21 20a5 5 0 00-4-5"/></svg></div><div><h3>For your patients</h3><span>Web app + lobby tablet</span></div></div>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Book online themselves, in English or Spanish</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Fill out forms &amp; sign on a phone or tablet</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Check in by name &amp; birthday, no front-desk line</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Get reminders, confirm or reschedule by text</li>
+      </ul>
+    </div></div>
+    <div class="bezel plain p2 reveal"><div class="core">
+      <div class="hd"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 20h10M8 8h8M8 12h5"/></svg></div><div><h3>For your team</h3><span>Android app on tablets</span></div></div>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> See the day &amp; book from any tablet</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Move, cancel and confirm appointments</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> See who's arrived &amp; who's waiting, live</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Text patients &amp; work the overdue list</li>
+      </ul>
+    </div></div>
+  </div>
+</section>
+
+<!-- INTEGRATION -->
+<section class="wrap" id="integration">
+  <div class="sec-head reveal">
+    <span class="eyebrow"><span class="dot"></span> How it connects · what you're paying for</span>
+    <h2>Your API is read-only. Here's how each approach fixes that.</h2>
+    <p>Today your OpenDental key can <span class="term">read<span class="tip">Read = look at data only. Your current key can show schedules, patients and forms, but can't change anything.</span></span> your data but can't <span class="term">write<span class="tip">Write = create or change data, like booking an appointment or saving a filled-out form. This is what your read-only key can't do — yet.</span></span>. Every approach below closes that gap. You choose; we recommend <span class="term">Hybrid<span class="tip">Read with the official API, write to your own database. Full power, nothing extra to pay, all on your server.</span></span>.</p>
+  </div>
+  <div class="startpoint reveal">
+    <div class="sp-row"><span class="sp-tag read">Reads ✓</span> Your key already does this — show schedules, slots, patients, forms, documents.</div>
+    <div class="sp-row"><span class="sp-tag write">Writes ✗</span> This is the gap — booking, saving forms, signatures, status changes. The four approaches below are the different ways we add it.</div>
+  </div>
+  <div class="modes" id="modes"></div>
+  <div class="bezel mode-detail reveal"><div class="core" id="modeDetail"></div></div>
+  <div class="note reveal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+    <p><b>What this means for you:</b> you pay me <b>once</b> to build the apps — you don't pay any monthly platform fee, and with the recommended Hybrid approach you don't pay OpenDental anything extra either. Reads use your existing free key; writes go to your own database on your own server. The paid OpenDental write-API (~$60/mo) stays <b>optional</b> — and since it still can't do signatures or payments, Hybrid is simply the better fit. If you ever want it, we switch any feature over without a rebuild.</p>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="wrap" id="pricing">
+  <div class="sec-head center reveal">
+    <span class="eyebrow"><span class="dot"></span> Tiers</span>
+    <h2>Three depths. Both apps in every one.</h2>
+    <p>Start with Essential, add the rest later on the same codebase — nothing gets rebuilt.</p>
+  </div>
+  <div class="price-grid" id="priceGrid"></div>
+  <p class="price-note reveal">Every tier is <b>one-time</b> — self-hosted on your own server, no subscriptions ever, you own it outright. These are starting points, not a final bill; we tailor the exact scope and price to what you actually want. Most start with Essential and add the rest later on the same codebase.</p>
+</section>
+
+<!-- FEATURES -->
+<section class="wrap" id="features">
+  <div class="sec-head reveal">
+    <span class="eyebrow"><span class="dot"></span> Features</span>
+    <h2>What each thing actually does.</h2>
+    <p>Plain description + a real example for every feature. Filter by tier or app.</p>
+  </div>
+  <div class="filters reveal">
+    <span class="label">Tier</span>
+    <button class="fbtn active" data-grp="tier" data-val="all">All</button>
+    <button class="fbtn" data-grp="tier" data-val="Essential">Essential</button>
+    <button class="fbtn" data-grp="tier" data-val="Professional">Professional</button>
+    <button class="fbtn" data-grp="tier" data-val="Complete">Complete</button>
+    <button class="fbtn" data-grp="tier" data-val="Add-on">Add-ons</button>
+    <span class="fcount" id="fcount"></span>
+  </div>
+  <div class="filters reveal" style="margin-top:9px">
+    <span class="label">App</span>
+    <button class="fbtn active" data-grp="plat" data-val="all">All</button>
+    <button class="fbtn" data-grp="plat" data-val="web">Web</button>
+    <button class="fbtn" data-grp="plat" data-val="android">Android</button>
+    <button class="fbtn" data-grp="plat" data-val="both">Both</button>
+  </div>
+  <div class="legend reveal">
+    <span><span class="dot t-ess"></span> Essential</span>
+    <span><span class="dot t-pro"></span> Professional</span>
+    <span><span class="dot t-com"></span> Complete</span>
+    <span><span class="dot t-add"></span> Add-on</span>
+    <span style="width:1px;height:14px;background:var(--line-2)"></span>
+    <span><span class="dot" style="background:var(--pf-web)"></span> Web</span>
+    <span><span class="dot" style="background:var(--pf-app)"></span> Android</span>
+    <span><span class="dot" style="background:var(--pf-both)"></span> Both</span>
+    <span style="color:var(--teal-deep);font-weight:600;margin-left:auto">→ tap any feature</span>
+  </div>
+  <div class="feat-grid" id="featGrid"></div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="wrap" id="addons">
+  <div class="sec-head reveal">
+    <span class="eyebrow"><span class="dot"></span> Optional add-ons</span>
+    <h2>Bolt on what you need, when you need it.</h2>
+    <p>None of these are required. Pick any of them later — we'll scope each one when you actually want it. <b style="color:var(--teal-deep)">Tap any card for a quick example.</b></p>
+  </div>
+  <div class="addon-grid" id="addonGrid"></div>
+</section>
+
+<!-- NOTES -->
+<section class="wrap" id="talk">
+  <div class="sec-head reveal">
+    <span class="eyebrow"><span class="dot"></span> Worth knowing</span>
+    <h2>The honest limits.</h2>
+    <p>The trade-offs, stated plainly. <b style="color:var(--teal-deep)">Tap any card for a plain-English example.</b></p>
+  </div>
+  <div class="talk-grid" id="talkGrid"></div>
+</section>
+
+<!-- FAQ -->
+<section class="wrap" id="faq">
+  <div class="sec-head center reveal"><span class="eyebrow"><span class="dot"></span> Questions</span><h2>Quick answers.</h2></div>
+  <div class="faq" id="faqList"></div>
+</section>
+
+<!-- CTA -->
+<section class="wrap cta" id="cta">
+  <div class="bezel reveal"><div class="core">
+    <h2>Let's lock the scope.</h2>
+    <p>The tier prices are rough ballpark estimates — not a bill, and nothing to be scared of. Once you've had a look, we'll talk through exactly which features and which tier actually fit you. It's fully custom and flexible: you decide what you need, and I build precisely that — nothing you don't.</p>
+    <p style="margin-top:12px">Recommended: start small with Essential, go live, then grow. First step is a short, no-pressure call.</p>
+    <div class="ctas">
+      <a href="mailto:tr00x@proton.me?subject=Clean%20Smiles%20%C3%97%20OpenDental" class="btn btn-primary">Email Tim <span class="ic">↗</span></a>
+    </div>
+    <div class="email-line">or just copy my email:
+      <button class="email-copy" data-email="tr00x@proton.me" title="Click to copy">tr00x@proton.me <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></button>
+      <span class="copied">Copied!</span>
+    </div>
+    <div class="email-line" style="margin-top:10px">or call / text:
+      <a href="tel:+15165607492" class="email-copy" title="Tap to call">516-560-7492 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a1 1 0 01-1 1A16 16 0 014 5a1 1 0 011-1z"/></svg></a>
+    </div>
+    <div class="avail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Phone is best after 7 PM until morning — New York time (ET)</div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h4>Discovery call</h4><p>OD version, forms, providers/chairs, server access.</p></div>
+      <div class="step"><div class="n">2</div><h4>Fixed quote</h4><p>Scope &amp; price locked in a day or two.</p></div>
+      <div class="step"><div class="n">3</div><h4>Go live</h4><p>Deployed on your Proxmox. Yours, no subscriptions.</p></div>
+    </div>
+  </div></div>
+</section>
+
+<footer class="wrap">
+  <div class="fbrand"><span class="mark" style="width:23px;height:23px;font-size:11px">CS</span> Tim Hunt · OpenDental &amp; clinic automation</div>
+  <div>For Hasan Akber, DDS · Clean Smiles Dental, Houston TX · <a href="mailto:tr00x@proton.me" style="color:var(--teal-deep);font-weight:600">tr00x@proton.me</a></div>
+</footer>
+
+<div class="modal" id="modal"><div class="modal-bg"></div><div class="modal-card" id="modalCard"></div></div>
+
+<script>
+var io;
+setTimeout(function(){try{document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in');});}catch(_){}} ,2500);
+
+const MODES=[
+  {name:"API Read-Only",ol:"The free key you already have — read everything, write nothing.",local:"On your server",cost:"$0",sig:"No",rec:false,
+   read:"OpenDental API",write:"nothing yet",wstate:"none",
+   means:"We can <b>show</b> everything but <b>change nothing</b>. Fine as a starting point or for read-only dashboards — but to actually book or save forms you'd still pick one of the options below."},
+  {name:"Full API (write)",ol:"OpenDental's paid write permission — writes go through their API.",local:"Routes via OpenDental",cost:"~$60/mo",sig:"No",rec:false,
+   read:"OpenDental API",write:"OpenDental paid API",wstate:"cost",
+   means:"Writes go through OpenDental's <b>paid</b> API (~$60/mo, forever). It ties you to their service and <b>still can't</b> do signatures or payments — so it's rarely the best choice here."},
+  {name:"Direct DB",ol:"Talk straight to your own database — read or write anything.",local:"Fully local",cost:"$0",sig:"Yes",rec:false,
+   read:"Your database",write:"Your database",wstate:"good",
+   means:"We read and write straight to <b>your own database</b>. Most powerful and free, fully on your server — it's unofficial, so we add automatic backups and safety checks."},
+  {name:"Hybrid",ol:"Read via the official API, write to your own database. The default.",local:"Fully local writes",cost:"$0",sig:"Yes",rec:true,
+   read:"OpenDental API",write:"Your database",wstate:"good",
+   means:"Read the <b>safe official</b> way, write to <b>your own database</b>. Full power including native signatures, nothing extra to pay, everything on your server. This is what we recommend."},
+];
+const CONN={
+  'Reads (API)':"Uses your existing read-only key. No extra cost, nothing to set up.",
+  'Writes (API)':"Writes through OpenDental's API — needs their paid write permission (~$60/mo).",
+  'Local write':"Saves straight to your own database. Works without the paid API, and can do native signatures.",
+  'Local read':"Reads straight from your own database — fast, for reports and dashboards.",
+  'Hybrid':"Reads via the official API, writes to your own database. The recommended default — free and fully local.",
+  'App':"Lives entirely in your own app — doesn't depend on OpenDental at all.",
+  'Payments':"Runs through your own Stripe/Square account for card payments."
+};
+const TIERS=[
+  {name:"Essential",tag:"Go live",h:"Online booking, lobby check-in and reminders. The core set on both apps.",price:"$3,000",time:"1 week",count:15,feat:false,
+   items:["New-patient online booking","SMS + email reminders (your own keys)","Lobby self check-in + mark arrived","Locked-down kiosk tablet","Staff 'Today' schedule view","Branded, bilingual web pages","English / Español + accessibility"]},
+  {name:"Professional",tag:"Recommended",h:"Full self-scheduling, digital intake with native signatures, two-way text, staff mobile booking.",price:"$7,000",time:"2 weeks",count:38,feat:true,
+   items:["Everything in Essential, plus:","Existing-patient booking, reschedule, cancel","Recall self-scheduling + reactivation texts","Waitlist / cancellation backfill","Digital intake forms + native signatures","Insurance-card OCR, doc capture","Two-way texting inbox","Staff: search-and-book, walk-ins, day/week grid","Roles, push, multi-device sync, audit log"]},
+  {name:"Complete",tag:"Everything",h:"Adds automation, analytics, family check-in and offline-proof tablets.",price:"$10,000",time:"4 weeks",count:56,feat:false,
+   items:["Everything in Professional, plus:","Family / guardian-minor check-in","Auto gap-filling + schedule analytics","Production KPIs & no-show dashboard","Treatment-plan & balance / copay view","Birthday / aftercare sequences","Offline tablets + daily huddle view","Chart photo/document viewer & capture"]},
+];
+const ADDONS=[
+  {n:"Payments &amp; Deposits",d:"Deposits, no-show fees and card-on-file via your own Stripe/Square (you pay only the processor's per-transaction fee).",eg:"A new patient books a crown consult → the app asks for a $50 deposit on your Stripe. They show up, it's applied; they ghost, you keep it."},
+  {n:"AI No-Show Risk Scoring",d:"Scores upcoming appointments and flags who should pre-pay a deposit.",eg:"Tomorrow's 3pm is a first-timer who booked at midnight → flagged high-risk → the app suggests a confirmation call or a deposit."},
+  {n:"AI Form Pre-Fill",d:"Returning-patient forms arrive pre-filled; the patient just confirms.",eg:"A returning patient opens intake → name, address, insurance already filled from OpenDental → they fix one phone number and submit."},
+  {n:"Extra Language",d:"Add another language (e.g. Vietnamese) across all patient screens.",eg:"Add Tiếng Việt → booking, forms and reminders all get a Vietnamese toggle, same as English/Spanish."},
+  {n:"Care &amp; Maintenance",d:"Revalidation before OD upgrades, backups, monitoring, fixes, a block of change hours.",eg:"OpenDental ships a big update → I re-test every write and fix anything that drifted, so you never notice a thing."},
+  {n:"OD Upgrade Revalidation",d:"Re-test the local writes against a new major OpenDental version. Free on the retainer.",eg:"You jump from OpenDental v24 to v25 → one pass re-maps the writes and confirms signatures still save before it goes live."},
+  {n:"Messaging Setup",d:"Stand up your own Twilio/SES + 10DLC so texts run at carrier cost, no markup.",eg:"I register your clinic's number for A2P 10DLC and wire up Twilio so reminders actually deliver instead of getting filtered as spam."},
+  {n:"Proxmox Deployment",d:"Install on your Proxmox, scoped DB user, backups, secured access, runbook.",eg:"I spin up the VM on your Proxmox, lock the DB user to only what we touch, set nightly backups, and hand you a one-page runbook."},
+];
+const TALK=[
+  {t:"Native signatures need the local path",d:"OD's API can't write signatures. We write them straight to your database. On an API-only setup they fall back to a signed image.",eg:"With the local write on, a signed consent shows in OpenDental exactly like a signature-pad signing. Without it, you'd get a signed PDF image attached to the chart instead — still valid, just not the native field."},
+  {t:"Payments use your own processor",d:"OD takes no patient payments. Cards run through your own Stripe/Square (the add-on) and reconcile back.",eg:"A $40 copay paid at the kiosk lands in YOUR Stripe account, not ours. We post it back to the ledger — there's no middleman taking a cut."},
+  {t:"Local writes are version-aware",d:"Direct DB writes aren't OD-sanctioned, so we pin to your version, back up first, and a guard pauses writes if the schema changes.",eg:"If an OpenDental update changes a table, the guard notices and pauses writes instead of saving into the wrong place — then I revalidate and turn it back on."},
+  {t:"HIPAA is shared",d:"You get audit logs, kiosk auto-wipe, role access, encryption, backups. Any outside SMS/payment provider needs a BAA with that vendor.",eg:"The software gives you the safeguards (audit log, auto-wipe, encryption). But if you text patients through Twilio, you — not me — sign a BAA with Twilio. I'll point out exactly where that's needed."},
+];
+const FAQ=[
+  {q:"Do I need to buy API write access from OpenDental?",a:"No. Your free read key covers all reads. Writes use your own database. The paid ~$60/mo permission is optional and still can't do signatures or payments anyway, so it wouldn't replace the local path."},
+  {q:"Is my data leaving my server?",a:"No. Everything runs on your Proxmox. Reads use the OD API, writes hit your own MySQL — both on your hardware. The only outside services are ones you control: your SMS/email account, and (optional) your own Stripe/Square."},
+  {q:"What happens when I upgrade OpenDental?",a:"Reads use the stable API. The local-write side is pinned to your version with a guard that safely pauses writes if the schema changed, plus backups. Before a major upgrade we run a quick revalidation pass."},
+  {q:"Why not just use eClipboard / Web Sched / Weave?",a:"Those are monthly subscriptions and your data lives partly on their servers. This is the same set of capabilities as one system you own outright, on your server, branded, and bilingual. Pay once instead of renting forever."},
+  {q:"Can my Spanish-speaking, less tech-savvy patients use it?",a:"Yes. Every patient screen is English/Spanish with a one-tap toggle, plus large text, high contrast, read-aloud, and a simple no-login check-in by name and birthday."},
+];
+const FEATURES=[
+  ["New-patient online booking","Scheduling","web","Essential","Hybrid","First-time patients book from your site, no call, no login.","Picks 'New patient exam', sees real open times, books — lands in your OD book flagged new patient."],
+  ["Real-time availability","Scheduling","web","Essential","Reads (API)","Shows only genuinely open times — respects providers, chairs, blocks, durations.","If Dr. A is booked 2–3pm, that slot never shows online."],
+  ["Existing-patient booking","Scheduling","web","Professional","Hybrid","Logged-in patients book against their own record and usual provider.","Maria logs in and books her 6-month cleaning with her hygienist in 3 taps."],
+  ["Reschedule &amp; cancel","Scheduling","web","Professional","Hybrid","Patients move or cancel from the portal or a reminder link.","Taps 'reschedule' in the text, picks a new time; the old slot reopens instantly."],
+  ["Recall / hygiene self-booking","Scheduling","web","Professional","Hybrid","Patients who are due for a cleaning book into hygiene openings.","Recall text 'you're due' → link shows hygiene-only times → books."],
+  ["Family / dependents booking","Scheduling","web","Complete","Hybrid","One login manages appointments for everyone on the account.","A parent books both kids back-to-back from one screen."],
+  ["Hold-the-slot + pre-fill","Scheduling","web","Professional","Hybrid","Reserves the chosen time during checkout; pre-fills returning visitors.","Slot is held ~5 min so two people can't grab the same one."],
+  ["Appointment confirmations","Reminders","both","Essential","Hybrid","One tap marks the appointment confirmed in OpenDental.","Patient taps 'Confirm' in the reminder; status flips in your book."],
+  ["Reminders (SMS + email)","Reminders","both","Essential","App","Automatic reminders on your own Twilio/SES, EN or ES.","Texts 7 days, 2 days and 2 hours out, with a confirm/reschedule link."],
+  ["Two-way texting inbox","Reminders","both","Professional","App","Staff text patients; replies land in one shared, per-patient inbox.","Patient replies 'can I come at 3?' — it shows in the inbox, not a personal phone."],
+  ["Reactivation campaigns","Reminders","both","Professional","App","Auto-texts overdue / lapsed patients until they book.","No visit in 9 months → gets a sequence → stops once booked."],
+  ["Birthday / aftercare touches","Reminders","both","Complete","App","Scheduled messages: birthdays, post-op care, treatment nudges.","Day after an extraction: an aftercare text goes out."],
+  ["Broadcast messaging","Reminders","web","Professional","App","One SMS/email to a filtered group.","'Closed Friday for the holiday' to everyone with an appointment that week."],
+  ["Review requests","Reminders","both","Professional","App","After a kept visit, asks for a review; routes unhappy replies privately.","5 stars → Google link; low rating → private form, not public."],
+  ["Waitlist / ASAP backfill","Schedule recovery","both","Professional","Hybrid","Fills cancellations from a waitlist, first to confirm wins.","10am cancels → texts 5 waitlisted patients → first to tap 'claim' gets it."],
+  ["Gap finder","Schedule recovery","web","Complete","App","Shows tomorrow's empty slots and who could fill them.","'2 holes tomorrow PM — here are 6 overdue patients to call.'"],
+  ["Digital intake forms","Intake","both","Professional","Hybrid","Patients fill your real OD forms on a phone or tablet; answers go to the chart.","New patient finishes medical history at home; it's in OD before they arrive."],
+  ["Native signatures","Intake","both","Professional","Local write","On-screen signatures saved as real signed sheets in OpenDental.","Signed HIPAA consent appears in the chart like a signature-pad signing."],
+  ["Insurance-card OCR","Intake","both","Professional","App","Photo of the card auto-reads carrier, member ID and group.","Snaps front/back → fields pre-filled → patient just confirms."],
+  ["Photo ID / document upload","Intake","both","Professional","Writes (API)","Capture license, X-rays or paperwork into the patient's documents.","Front desk photographs a referral letter → attached to the chart."],
+  ["Demographics / insurance update","Intake","both","Professional","Hybrid","Returning patients review pre-filled info and fix what changed.","New phone number? Patient edits it; the change writes back to OD."],
+  ["Pre-visit checklist","Intake","both","Complete","Hybrid","Builds a to-do of only what's missing or expired for that patient.","Forms current? skip. Consent expired? prompt to re-sign."],
+  ["Pharmacy / screening capture","Intake","android","Complete","Hybrid","Captures pharmacy, primary doctor and a short health screen; flags answers.","Patient marks 'on blood thinners' → staff sees an alert."],
+  ["Self check-in (name + DOB)","Kiosk","android","Essential","Reads (API)","Patient checks in at the lobby tablet by name + birthday.","'Maria Lopez, 04/12/1980' → her 9:30 appt shows → taps confirm."],
+  ["Confirm &amp; mark arrived","Kiosk","both","Essential","Hybrid","Check-in flips the appointment to Arrived in real time.","Front desk sees 'Arrived' the moment the patient checks in."],
+  ["Kiosk lockdown + auto-reset","Kiosk","android","Essential","App","Tablet locked to the app; wipes the screen after each patient.","Can't exit to settings; next patient sees a clean welcome screen."],
+  ["Branded idle screen","Kiosk","android","Essential","App","Idle tablet shows your logo and tips; tap to start.","Between patients: 'Clean Smiles — tap to check in.'"],
+  ["Forms-to-phone handoff","Kiosk","both","Professional","App","Move the same intake packet to the patient's phone via QR/SMS.","Lobby busy? scan the QR and finish forms in your seat."],
+  ["Selfie for chart","Kiosk","android","Complete","Writes (API)","Optional check-in photo set as the patient picture.","Staff see the patient's face in the chart before calling them back."],
+  ["Guardian / minor check-in","Kiosk","android","Complete","Local write","A parent checks in and signs consents for several kids at once.","Mom signs forms for both children in one session."],
+  ["Live queue / waiting status","Kiosk","both","Professional","Hybrid","Patient sees 'checked in'; staff see who's waiting and how long.","Board: 'Maria — waiting 12 min', amber past 15."],
+  ["Post-visit survey","Kiosk","android","Complete","App","Quick exit rating; complaints go to the manager, not public.","1–2 stars → private note to the office manager."],
+  ["Today view","Staff scheduling","android","Essential","Reads (API)","Today's schedule per chair/provider with live status chips.","Assistant glances at the tablet to see the whole day."],
+  ["Day / week grid","Staff scheduling","android","Professional","Reads (API)","Appointment-book grid mirroring OpenDental, by chair.","The same column-per-chair view staff already know."],
+  ["Search &amp; book / walk-in","Staff scheduling","android","Professional","Hybrid","Find a patient, pick a type, see open slots, book — from the tablet.","Walk-in at 11 → book into the next open chair, no front PC."],
+  ["Reschedule / move","Staff scheduling","android","Professional","Hybrid","Move an appointment to a new time, chair or the unscheduled list.","Drag the 2pm to 4pm from the tablet."],
+  ["Cancel / no-show","Staff scheduling","android","Professional","Hybrid","Cancel with a reason or flag a no-show; feeds re-engagement.","Mark no-show → patient drops onto the reactivation list."],
+  ["One-tap / bulk confirm","Staff scheduling","android","Professional","Hybrid","Toggle confirmations, or confirm a whole day at once.","Confirm everyone for tomorrow in one action."],
+  ["Provider / chair filter","Staff scheduling","android","Professional","Reads (API)","Show only chosen providers/chairs, saved per user.","Hygienist sees only her column."],
+  ["Quick-create patient","Staff scheduling","android","Professional","Hybrid","Make a basic patient record for walk-ins; edit demographics.","New caller → create name/DOB/phone → book right away."],
+  ["Patient lookup &amp; profile","Clinical context","android","Professional","Reads (API)","One screen: contact, provider, balance, history, flags, family.","Search 'Lopez' → next visit, balance and medical flags."],
+  ["Call / text patient","Clinical context","android","Professional","App","Tap to call or send a templated message; logs it.","'Running late?' text from the patient's screen in one tap."],
+  ["Appointment notes","Clinical context","android","Professional","Hybrid","Read and add notes with quick-tap chips.","Add 'patient prefers morning' to the appointment."],
+  ["Document / photo viewer","Clinical context","android","Complete","Reads (API)","View X-rays, photos and scanned forms with pinch-zoom.","Pull up the last X-ray chairside, no walk to the PC."],
+  ["Capture to chart","Clinical context","android","Complete","Writes (API)","Tablet camera → photo/form into the patient's documents.","Photograph a signed paper form straight into OD."],
+  ["Patient flow status","Worklists","android","Professional","Hybrid","Advance Arrived → Ready → Complete with timestamps.","Tap 'Ready' so the assistant knows to bring them back."],
+  ["Waiting-room board","Worklists","android","Professional","Hybrid","Live list of who's checked in and minutes waiting.","A back-office tablet shows the lobby at a glance."],
+  ["Recall / overdue worklist","Worklists","android","Professional","Hybrid","Due/overdue patients with one-tap call, text or book.","Slow afternoon → work the overdue list from the tablet."],
+  ["Daily huddle view","Worklists","android","Complete","Local read","Morning summary: production, patient count, gaps, new patients.","Team huddles around one screen, not one monitor."],
+  ["Role-based access","Staff platform","android","Professional","App","Each login sees only the screens/actions for its role.","Assistants can't see financials; only managers can."],
+  ["Push notifications","Staff platform","android","Professional","App","Alerts: patient arrived, same-day booking, waitlist match, reply.","Buzz when your next patient checks in."],
+  ["Multi-device sync","Staff platform","android","Professional","App","Every tablet/phone updates within seconds.","Book on one tablet, it shows on all the others instantly."],
+  ["Team messaging","Staff platform","android","Complete","App","Quick in-app pings tied to chairs/patients.","'Ready for exam in Op 3' to the doctor."],
+  ["Offline sync","Staff platform","android","Complete","App","Keeps working in Wi-Fi dead spots; syncs when back.","Forms filled in a back room with no signal upload later."],
+  ["Patient account / login","Portal","web","Professional","App","Self-hosted login tied to the OD record; a visit/forms dashboard.","Patient logs in to see upcoming visits and past forms."],
+  ["Branded fast pages","Portal","web","Essential","App","Fast, your-branded booking pages instead of the OD iframe.","'Book online' stays on cleansmilesdental.com, not a gray third-party page."],
+  ["Map &amp; office info","Portal","web","Essential","App","Map, parking, hours and add-to-calendar on the confirmation.","Confirmation has 'Add to Calendar' + directions."],
+  ["Visit prep info","Portal","web","Professional","App","Per-appointment-type instructions at booking and in reminders.","Sedation appt → 'don't eat 6 hours before' in EN/ES."],
+  ["Treatment plan / balance view","Portal","web","Complete","Local read","Patients see proposed treatment and balance, with 'request to schedule'.","Sees a pending crown and balance → taps to book it."],
+  ["Copay / balance at check-in","Portal","android","Complete","Local read","Shows balance / estimated copay during check-in (display only).","'Balance due: $40' on the check-in screen."],
+  ["Bilingual EN / ES","Accessibility","both","Essential","App","Every patient screen in English or Spanish, one-tap toggle.","Patient picks Español; answers still save to your English OD fields."],
+  ["Accessibility","Accessibility","both","Essential","App","Large text, high contrast, read-aloud, screen-reader support.","Elderly patient turns on big text + read-aloud to fill a form."],
+  ["Booking / activity dashboard","Admin","web","Professional","Hybrid","One panel of pending bookings, waitlist and who's done intake.","Morning check: 3 new online bookings, 2 forms missing."],
+  ["Form / kiosk console","Admin","web","Professional","Hybrid","Choose which OD forms appear on kiosk/portal; set fields, languages, timers.","Add a new consent to the kiosk yourself, no developer."],
+  ["White-label branding","Admin","both","Essential","App","Your logo, colors, domain, SMS sender and email address everywhere.","Texts come from 'Clean Smiles', not a vendor number."],
+  ["Pluggable integration","Admin","web","Essential","Hybrid","Per-feature switch between API-write and local DB-write; hybrid default.","Buy OD's paid API later? flip writes to it, no rebuild."],
+  ["Autopilot dashboard","Analytics","web","Complete","Local read","Production, no-show rate, utilization, recall compliance, recovered revenue.","See no-show rate drop from 14% to 6% since launch."],
+  ["Funnel analytics","Analytics","web","Complete","App","Where patients drop in booking, plus recall/waitlist fill rates.","'80% pick a slot, 60% finish' — see where they bail."],
+  ["Audit log","Analytics","web","Professional","App","Immutable record of every PHI access and write, exportable.","Who viewed/edited a chart and when — for compliance."],
+  ["Backup &amp; schema guard","Analytics","web","Professional","Local read","Backups + a guard that pauses writes if OD's schema changed.","After an OD update, writes pause safely until revalidated."],
+  ["Native recall sync","Analytics","web","Complete","Local write","Reads recalls via API; writes interval/status via local DB.","Recall edits land in OD's own recall system, no shadow list."],
+  ["Online deposits","Payments","both","Add-on","Payments","Deposits, no-show fees, card-on-file via your own Stripe/Square.","$50 deposit to book a big appointment, refunded if kept."],
+  ["Kiosk payment","Payments","android","Add-on","Payments","Pay a copay/deposit on the lobby tablet via your processor.","Patient taps to pay their $40 copay at check-in."],
+  ["AI no-show risk","AI","web","Add-on","App","Scores upcoming appointments; suggests who needs a deposit.","Flags a high-risk 3pm → prompt to require a deposit."],
+  ["AI form pre-fill","AI","both","Add-on","Hybrid","Returning-patient forms arrive pre-filled; flags likely-stale fields.","Existing patient just confirms instead of re-typing."],
+];
+
+const ARROW='→',CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+const SPARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.7 5L19 10l-5.3 1.8L12 17l-1.7-5.2L5 10l5.3-1.8z"/></svg>';
+const tierClass={Essential:'t-ess',Professional:'t-pro',Complete:'t-com','Add-on':'t-add'};
+const platLabel={web:'Web',android:'Android',both:'Web + Android'};
+
+document.getElementById('modes').innerHTML=MODES.map((m,i)=>`<div class="bezel mode${m.rec?' rec':''} reveal" data-i="${i}"><div class="core"><h3>${m.name}${m.rec?' <span class="rec-tag">Default</span>':''}</h3><div class="ol">${m.ol}</div><div class="stats"><div><span class="k">How local</span><span class="v">${m.local}</span></div><div><span class="k">Monthly fee</span><span class="v">${m.cost}</span></div><div><span class="k">Native signatures</span><span class="v ${m.sig==='Yes'?'yes':'no'}">${m.sig}</span></div></div><div class="pick"><span class="rd"></span> <span class="pl-lbl">Click to compare</span></div></div></div>`).join('');
+const modeDetail=document.getElementById('modeDetail');
+function showMode(i){
+  document.querySelectorAll('.mode').forEach(c=>{const on=+c.dataset.i===i;c.classList.toggle('sel',on);const l=c.querySelector('.pl-lbl');if(l)l.textContent=on?'Selected':'Click to compare';});
+  const m=MODES[i];
+  const wcls=m.wstate==='good'?'good':m.wstate==='cost'?'cost':'none';
+  const wbadge=m.wstate==='good'?'<span class="md-badge ok">free · local</span>':m.wstate==='cost'?'<span class="md-badge cost">~$60/mo</span>':'<span class="md-badge no">can\'t write yet</span>';
+  modeDetail.innerHTML=`<div class="md-flow"><div class="md-row"><span class="md-lab">Reading</span><span class="pill app">Your apps</span><span class="arrow">→</span><span class="pill api">${m.read}</span><span class="md-badge ok">works now</span></div><div class="md-row"><span class="md-lab">Writing</span><span class="pill app">Your apps</span><span class="arrow">→</span><span class="pill ${wcls}">${m.write}</span>${wbadge}</div></div><p class="md-means"><b>What this means:</b> ${m.means}</p>`;
+}
+document.querySelectorAll('.mode').forEach(c=>c.addEventListener('click',()=>showMode(+c.dataset.i)));
+showMode(3);
+
+document.getElementById('priceGrid').innerHTML=TIERS.map((t,ti)=>`<div class="bezel tier e${ti+1}${t.feat?' feat':''} reveal">${t.feat?'<span class="ribbon">Recommended</span>':''}<div class="core"><span class="tname">${t.tag}</span><h3>${t.name}</h3><div class="h">${t.h}</div><div class="price">${t.price} <span class="once">one-time</span></div><div class="meta"><span>One-time · self-hosted · <b>yours forever</b></span><span>Built in <b>${t.time}</b></span><span><b>~${t.count} features</b>, both apps</span></div><ul class="feat-list">${t.items.map(i=>`<li>${CHECK}<span>${i}</span></li>`).join('')}<li class="more">…full list below ↓</li></ul><a href="#cta" class="btn ${t.feat?'btn-primary':'btn-ghost'}">Start with ${t.name}<span class="ic">${ARROW}</span></a></div></div>`).join('');
+
+document.getElementById('addonGrid').innerHTML=ADDONS.map((a,i)=>`<div class="addon reveal" data-i="${i}"><h4>${a.n}</h4><p>${a.d}</p></div>`).join('');
+document.getElementById('talkGrid').innerHTML=TALK.map((t,i)=>`<div class="talk reveal" data-i="${i}"><div class="ic">${SPARK}</div><div><h4>${t.t}</h4><p>${t.d}</p></div></div>`).join('');
+document.getElementById('faqList').innerHTML=FAQ.map(f=>`<div class="qa reveal"><button>${f.q}<span class="pm">+</span></button><div class="ans"><p>${f.a}</p></div></div>`).join('');
+
+const featGrid=document.getElementById('featGrid');
+const cats=[...new Set(FEATURES.map(f=>f[1]))];
+featGrid.innerHTML=cats.map(cat=>{
+  const items=FEATURES.map((f,i)=>[f,i]).filter(p=>p[0][1]===cat);
+  return `<div class="cat-group reveal" data-cat="${cat}"><h3>${cat}</h3><div class="chips">${items.map(p=>{const f=p[0],i=p[1],plat=f[2],tier=f[3];const plc=plat==='web'?'web':plat==='android'?'app':'both';const pl=plat==='web'?'Web':plat==='android'?'App':'Both';return `<button class="chip-f" data-i="${i}" data-tier="${tier}" data-plat="${plat}"><span class="dot ${tierClass[tier]}"></span><span class="nm">${f[0]}</span><span class="pl ${plc}">${pl}</span></button>`;}).join('')}</div></div>`;
+}).join('');
+
+const CONNICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10.5 6.5l1-1a4 4 0 015.5 5.5l-1 1M13.5 17.5l-1 1a4 4 0 01-5.5-5.5l1-1"/></svg>';
+const modal=document.getElementById('modal'),modalCard=document.getElementById('modalCard');
+function renderModal(o){
+  modalCard.innerHTML=`<button class="close" aria-label="Close">×</button><span class="cat">${o.cat}</span><h3>${o.name}</h3>${o.tags?`<div class="m-tags">${o.tags}</div>`:''}<p class="m-what">${o.what}</p>${o.eg?`<div class="m-eg"><b>${o.egLabel||'Example'}</b><p>${o.eg}</p></div>`:''}${o.foot?`<div class="m-conn">${CONNICON}<div>${o.foot}</div></div>`:''}`;
+  modal.classList.add('open');document.body.style.overflow='hidden';
+}
+function closeModal(){modal.classList.remove('open');document.body.style.overflow='';}
+function openFeature(i){const[name,cat,plat,tier,intg,what,eg]=FEATURES[i];renderModal({cat,name,tags:`<span class="tag ${tierClass[tier]}">${tier} tier</span><span class="tag plat ${plat==='web'?'web':plat==='android'?'app':'both'}">${platLabel[plat]}</span>`,what,eg,foot:`<b style="color:var(--ink)">How it connects:</b> ${CONN[intg]||intg}`});}
+function openAddon(i){const a=ADDONS[i];renderModal({cat:'Optional add-on',name:a.n,what:a.d,eg:a.eg,foot:'<b style="color:var(--ink)">No pressure —</b> scoped and priced only when you decide you want it.'});}
+function openTalk(i){const t=TALK[i];renderModal({cat:'Worth knowing',name:t.t,what:t.d,eg:t.eg,egLabel:'In practice'});}
+featGrid.addEventListener('click',e=>{const b=e.target.closest('.chip-f');if(b)openFeature(+b.dataset.i);});
+document.getElementById('addonGrid').addEventListener('click',e=>{const b=e.target.closest('.addon');if(b)openAddon(+b.dataset.i);});
+document.getElementById('talkGrid').addEventListener('click',e=>{const b=e.target.closest('.talk');if(b)openTalk(+b.dataset.i);});
+modal.addEventListener('click',e=>{if(e.target.closest('.close')||e.target.classList.contains('modal-bg'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+const state={tier:'all',plat:'all'};
+function applyFilter(){let n=0;document.querySelectorAll('.chip-f').forEach(c=>{const ok=(state.tier==='all'||c.dataset.tier===state.tier)&&(state.plat==='all'||c.dataset.plat===state.plat);c.style.display=ok?'flex':'none';if(ok)n++;});document.querySelectorAll('.cat-group').forEach(g=>{const any=[...g.querySelectorAll('.chip-f')].some(c=>c.style.display!=='none');g.style.display=any?'':'none';});document.getElementById('fcount').textContent=n+' of '+FEATURES.length+' shown';}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{const g=b.dataset.grp;document.querySelectorAll(`.fbtn[data-grp="${g}"]`).forEach(x=>x.classList.remove('active'));b.classList.add('active');state[g]=b.dataset.val;applyFilter();}));
+applyFilter();
+
+document.getElementById('faqList').addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn)return;const qa=btn.parentElement,ans=qa.querySelector('.ans'),open=qa.classList.contains('open');document.querySelectorAll('.qa').forEach(x=>{x.classList.remove('open');x.querySelector('.ans').style.maxHeight=null;});if(!open){qa.classList.add('open');ans.style.maxHeight=ans.scrollHeight+'px';}});
+
+const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20),{passive:true});
+const burger=document.getElementById('burger'),mm=document.getElementById('mobileMenu');
+burger.addEventListener('click',()=>{const o=mm.classList.toggle('open');burger.children[0].style.transform=o?'translateY(7px) rotate(45deg)':'';burger.children[1].style.opacity=o?'0':'';burger.children[2].style.transform=o?'translateY(-7px) rotate(-45deg)':'';});
+mm.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mm.classList.remove('open');burger.children[0].style.transform='';burger.children[1].style.opacity='';burger.children[2].style.transform='';}));
+
+// tap-to-show tooltips (touch)
+document.addEventListener('click',e=>{const t=e.target.closest('.term');document.querySelectorAll('.term.show').forEach(x=>{if(x!==t)x.classList.remove('show');});if(t){e.preventDefault();t.classList.toggle('show');}});
+
+// click-to-copy email
+const ec=document.querySelector('.email-copy');
+if(ec)ec.addEventListener('click',()=>{const em=ec.dataset.email;try{navigator.clipboard&&navigator.clipboard.writeText(em);}catch(_){}const c=document.querySelector('.copied');if(c){c.classList.add('show');setTimeout(()=>c.classList.remove('show'),1800);}});
+
+function observeReveal(){if(!('IntersectionObserver'in window)){document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));return;}if(!io){io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{threshold:.1,rootMargin:'0px 0px -6% 0px'});}document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));}
+observeReveal();
+</script>
+</body>
+</html>
