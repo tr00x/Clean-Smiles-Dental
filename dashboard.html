@@ -1,0 +1,1582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clean Smiles Dental · Professional Project Dashboard</title>
+  <meta name="description" content="Client-facing project dashboard for the Clean Smiles Dental Professional implementation." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23101917'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial,sans-serif' font-size='24' font-weight='700' fill='%23fff'%3ECS%3C/text%3E%3C/svg%3E" />
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f5f7f1;
+  --surface: #ffffff;
+  --surface-muted: #edf3ee;
+  --surface-strong: #101917;
+  --ink: #13201d;
+  --ink-soft: #33443f;
+  --muted: #697873;
+  --muted-2: #8a9691;
+  --line: #dce5dd;
+  --line-strong: #c7d3ca;
+  --accent: #0e6f62;
+  --accent-strong: #07584e;
+  --accent-soft: #dcefeb;
+  --accent-tint: #eef8f5;
+  --warning: #946118;
+  --warning-soft: #fff1d5;
+  --danger: #9a3128;
+  --danger-soft: #ffe2de;
+  --done: #147c55;
+  --done-soft: #dff4e9;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(25, 46, 40, .10);
+  --shadow-soft: 0 14px 30px rgba(25, 46, 40, .08);
+  --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  font-family: var(--font);
+  background:
+    radial-gradient(circle at top left, rgba(14, 111, 98, .10), transparent 32rem),
+    linear-gradient(180deg, #fbfcf8 0%, var(--bg) 42%, #eef2ec 100%);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .38;
+  mix-blend-mode: multiply;
+  background-image:
+    linear-gradient(rgba(19, 32, 29, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(19, 32, 29, .035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,.95), rgba(0,0,0,.2));
+}
+
+button,
+select,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ambient {
+  position: fixed;
+  inset: auto -12rem -18rem auto;
+  width: 38rem;
+  height: 38rem;
+  border-radius: 999px;
+  background: rgba(14, 111, 98, .08);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+.page-shell {
+  position: relative;
+  width: min(1380px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 22px 0 64px;
+}
+
+.topbar {
+  position: sticky;
+  top: 14px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(199, 211, 202, .72);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .78);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 14px 42px rgba(22, 43, 38, .08);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: -.04em;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+}
+
+.brand strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+}
+
+.brand small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.topnav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topnav a {
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 13px;
+  transition: .18s ease;
+}
+
+.topnav a:hover {
+  border-color: var(--line);
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.loading-card,
+.noscript-card {
+  margin-top: 28px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.loading-line {
+  display: block;
+  width: min(42rem, 80%);
+  height: 16px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--surface-muted), #fff, var(--surface-muted));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.loading-line.short { width: min(22rem, 55%); }
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(340px, .72fr);
+  gap: 22px;
+  margin-top: 28px;
+  align-items: stretch;
+}
+
+.hero-panel,
+.status-panel,
+.card,
+.phase-card,
+.admin-panel {
+  border: 1px solid rgba(199, 211, 202, .86);
+  background: rgba(255, 255, 255, .86);
+  box-shadow: var(--shadow-soft);
+}
+
+.hero-panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 438px;
+  padding: clamp(26px, 4vw, 44px);
+  border-radius: calc(var(--radius-lg) + 6px);
+}
+
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 18px 18px auto auto;
+  width: 168px;
+  height: 168px;
+  border: 1px solid rgba(14, 111, 98, .16);
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(14, 111, 98, .12) 49% 51%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(14, 111, 98, .12) 49% 51%, transparent 51%);
+  opacity: .8;
+}
+
+.hero-panel::after {
+  content: "";
+  position: absolute;
+  right: 42px;
+  bottom: 32px;
+  width: min(44%, 360px);
+  height: 120px;
+  border-bottom: 1px solid rgba(14, 111, 98, .18);
+  border-left: 1px solid rgba(14, 111, 98, .18);
+  border-radius: 0 0 0 28px;
+  opacity: .85;
+}
+
+.kicker,
+.section-kicker,
+.mono-label {
+  font-family: var(--mono);
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  position: relative;
+  z-index: 2;
+  max-width: 830px;
+  margin: 24px 0 0;
+  font-size: clamp(48px, 7.2vw, 112px);
+  line-height: .86;
+  letter-spacing: -.085em;
+}
+
+.hero-title span {
+  color: var(--accent-strong);
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 610px;
+  margin: 26px 0 0;
+  color: var(--ink-soft);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.55;
+}
+
+.hero-meta {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: min(700px, 100%);
+  margin-top: 34px;
+}
+
+.meta-pill {
+  min-height: 88px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(245, 247, 241, .76);
+}
+
+.meta-pill small {
+  display: block;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.meta-pill strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 18px;
+  letter-spacing: -.04em;
+}
+
+.status-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px;
+  border-radius: calc(var(--radius-lg) + 6px);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(244, 249, 246, .9));
+}
+
+.status-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.status-title {
+  margin: 12px 0 0;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: .98;
+  letter-spacing: -.06em;
+}
+
+.progress-ring {
+  --value: 0;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--value) * 1%), #e5ebe4 0);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+}
+
+.progress-ring > span {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.next-action {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.next-action h2,
+.card h2,
+.phase-card h3 {
+  margin: 0;
+  letter-spacing: -.04em;
+}
+
+.next-action h2 {
+  font-size: 20px;
+}
+
+.next-action p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+}
+
+.status-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.status-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.status-list strong {
+  color: var(--ink);
+  text-align: right;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: max-content;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.status-chip::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-chip[data-status*="done"],
+.status-chip[data-status*="paid"] {
+  border-color: rgba(20, 124, 85, .18);
+  background: var(--done-soft);
+  color: var(--done);
+}
+
+.status-chip[data-status*="progress"],
+.status-chip[data-status*="ready"] {
+  border-color: rgba(14, 111, 98, .18);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.status-chip[data-status*="waiting"],
+.status-chip[data-status*="pending"],
+.status-chip[data-status*="due"] {
+  border-color: rgba(148, 97, 24, .18);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.status-chip[data-status*="blocked"] {
+  border-color: rgba(154, 49, 40, .18);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.status-chip[data-status*="included"] {
+  border-color: rgba(19, 32, 29, .12);
+  background: var(--surface-muted);
+  color: var(--ink-soft);
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 42px 0 16px;
+}
+
+.section-head h2 {
+  max-width: 720px;
+  margin: 4px 0 0;
+  font-size: clamp(30px, 4vw, 54px);
+  line-height: .96;
+  letter-spacing: -.065em;
+}
+
+.section-head p {
+  max-width: 480px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.card {
+  border-radius: var(--radius-lg);
+  padding: 22px;
+}
+
+.milestone-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 250px;
+}
+
+.milestone-card::after {
+  content: attr(data-index);
+  position: absolute;
+  right: 14px;
+  bottom: -20px;
+  color: rgba(14, 111, 98, .08);
+  font-family: var(--mono);
+  font-size: 150px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.14em;
+}
+
+.card-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.milestone-label {
+  margin-top: 12px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.amount {
+  position: relative;
+  z-index: 2;
+  margin: 18px 0 8px;
+  font-size: clamp(34px, 4.5vw, 58px);
+  line-height: .9;
+  letter-spacing: -.075em;
+}
+
+.card-copy {
+  position: relative;
+  z-index: 2;
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+}
+
+.due {
+  position: relative;
+  z-index: 2;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, .58fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.phase-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.phase-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, .42fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+}
+
+.phase-card[data-active="true"] {
+  border-color: rgba(14, 111, 98, .34);
+  box-shadow: 0 22px 56px rgba(14, 111, 98, .13);
+}
+
+.phase-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 18px;
+  border-right: 1px solid var(--line);
+}
+
+.phase-left p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.phase-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar {
+  overflow: hidden;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+}
+
+.progress-bar span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+}
+
+.task-list {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(220, 229, 221, .72);
+}
+
+.task-item:last-child { border-bottom: 0; }
+
+.task-main {
+  min-width: 0;
+}
+
+.task-title {
+  display: block;
+  font-weight: 700;
+  letter-spacing: -.018em;
+}
+
+.task-detail {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.side-stack {
+  display: grid;
+  gap: 14px;
+  position: sticky;
+  top: 102px;
+}
+
+.side-card h3 {
+  margin: 0 0 14px;
+  font-size: 22px;
+  letter-spacing: -.045em;
+}
+
+.client-need {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+}
+
+.client-need span:first-child {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.included-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.included-list li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.included-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .65em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.privacy-card {
+  background: var(--surface-strong);
+  color: #fff;
+  border-color: rgba(255,255,255,.10);
+}
+
+.privacy-card p {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-size: 14px;
+}
+
+.updates-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .42fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 14px;
+}
+
+.update-card {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 18px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+}
+
+.update-date {
+  color: var(--accent-strong);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.update-card h3 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -.045em;
+}
+
+.update-card p {
+  margin: 7px 0 0;
+  color: var(--muted);
+}
+
+.footer-card {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  color: #fff;
+}
+
+.footer-card small {
+  color: rgba(255,255,255,.58);
+}
+
+.footer-card a {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 13px;
+}
+
+.admin-panel {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: #101917;
+  color: #fff;
+}
+
+.admin-panel h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -.03em;
+}
+
+.admin-panel p {
+  margin: 8px 0 0;
+  color: rgba(255,255,255,.68);
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.admin-button,
+.admin-select,
+.admin-range {
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+}
+
+.admin-button {
+  cursor: pointer;
+  padding: 10px 14px;
+  transition: .18s ease;
+}
+
+.admin-button:hover {
+  background: rgba(255,255,255,.14);
+}
+
+.admin-select {
+  width: 100%;
+  max-width: 210px;
+  padding: 8px 12px;
+  color: var(--ink);
+  background: #fff;
+  border-color: var(--line-strong);
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.admin-range {
+  accent-color: var(--accent);
+  width: min(260px, 100%);
+}
+
+.admin-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.admin-inline label {
+  color: rgba(255,255,255,.76);
+  font-size: 13px;
+}
+
+.copy-toast {
+  display: none;
+  margin-top: 10px;
+  color: #a8eadb;
+  font-size: 13px;
+}
+
+.copy-toast.visible { display: block; }
+
+.code-output {
+  display: none;
+  width: 100%;
+  min-height: 220px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: var(--radius-sm);
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.code-output.visible { display: block; }
+
+@media (max-width: 1050px) {
+  .hero-grid,
+  .main-grid,
+  .updates-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .side-stack {
+    position: static;
+  }
+
+  .milestone-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .phase-card {
+    grid-template-columns: 1fr;
+  }
+
+  .phase-left {
+    padding-right: 0;
+    padding-bottom: 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 22px, 1380px);
+    padding-top: 10px;
+  }
+
+  .topbar {
+    position: static;
+    align-items: flex-start;
+    border-radius: 24px;
+  }
+
+  .topnav {
+    display: none;
+  }
+
+  .hero-panel,
+  .status-panel,
+  .card,
+  .phase-card {
+    border-radius: 22px;
+  }
+
+  .hero-panel {
+    min-height: auto;
+  }
+
+  .hero-title {
+    font-size: clamp(46px, 16vw, 72px);
+  }
+
+  .hero-copy {
+    font-size: 16px;
+  }
+
+  .hero-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .status-top,
+  .section-head,
+  .footer-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .task-item,
+  .client-need {
+    grid-template-columns: 1fr;
+  }
+
+  .update-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+</style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="page-shell">
+    <header class="topbar" aria-label="Dashboard header">
+      <a class="brand" href="./" aria-label="Clean Smiles project dashboard home">
+        <span class="brand-mark">CS</span>
+        <span>
+          <strong>Clean Smiles</strong>
+          <small>Project dashboard</small>
+        </span>
+      </a>
+      <nav class="topnav" aria-label="Page sections">
+        <a href="#milestones">Milestones</a>
+        <a href="#work-plan">Work plan</a>
+        <a href="#updates">Updates</a>
+      </nav>
+    </header>
+
+    <main id="app" aria-live="polite">
+      <section class="loading-card">
+        <span class="loading-line"></span>
+        <span class="loading-line short"></span>
+        <p>Loading project dashboard…</p>
+      </section>
+    </main>
+  </div>
+
+  <noscript>
+    <div class="noscript-card">This project dashboard needs JavaScript enabled to render the latest status.</div>
+  </noscript>
+
+  <script>
+window.DASHBOARD_DATA = {
+  project: {
+    clinic: "Clean Smiles Dental",
+    client: "Hasan Akber, DDS",
+    preparedFor: "For Hasan Akber, DDS · Clean Smiles Dental, Houston TX",
+    owner: "Tim Hunt",
+    ownerEmail: "tr00x@proton.me",
+    plan: "Professional",
+    fixedPrice: "$5,500",
+    originalPlanPrice: "$7,000",
+    status: "Waiting on approval",
+    currentMilestone: "Approval & kickoff",
+    currentAction: "Reply “approved” so the milestone agreement and first invoice can be sent.",
+    lastUpdated: "June 29, 2026",
+    overallProgress: 8,
+    launchTiming: "TBD after approval",
+    proposalUrl: "https://tr00x.github.io/Clean-Smiles-Dental/",
+    privacyNote: "No patient data, passwords, OpenDental credentials, or server details are stored on this page."
+  },
+  milestones: [
+    {
+      name: "Milestone 1",
+      label: "Project start",
+      amount: "$1,500",
+      due: "Due on approval",
+      status: "Ready to invoice",
+      summary: "Finalize scope, confirm workflow, collect access details, and start the Professional build."
+    },
+    {
+      name: "Milestone 2",
+      label: "Working demo",
+      amount: "$2,000",
+      due: "Due after first working review",
+      status: "Scheduled",
+      summary: "Patient flow and internal team workflow are ready for review on the project dashboard."
+    },
+    {
+      name: "Milestone 3",
+      label: "Deployment & go-live",
+      amount: "$2,000",
+      due: "Due before production deployment",
+      status: "Scheduled",
+      summary: "Deploy on the clinic server, test workflows, hand off to staff, and support launch."
+    }
+  ],
+  phases: [
+    {
+      title: "Approval & kickoff",
+      subtitle: "Lock the Professional package and begin the build.",
+      owner: "Clean Smiles + Tim",
+      status: "Waiting on approval",
+      progress: 30,
+      tasks: [
+        { label: "Professional scope reviewed", status: "Done" },
+        { label: "Adjusted fixed price prepared", detail: "$5,500 instead of $7,000", status: "Done" },
+        { label: "Milestone payment structure prepared", status: "Done" },
+        { label: "Client approval", detail: "Reply “approved” by email or text", status: "Waiting on client" },
+        { label: "Milestone 1 invoice", status: "Ready" }
+      ]
+    },
+    {
+      title: "Setup & workflow review",
+      subtitle: "Confirm exactly how the front desk, lobby, and patient flow should work.",
+      owner: "Tim",
+      status: "Not started",
+      progress: 0,
+      tasks: [
+        { label: "Confirm patient booking/check-in flow", status: "Not started" },
+        { label: "Confirm team/lobby workflow", status: "Not started" },
+        { label: "Review OpenDental read access and server path", status: "Not started" },
+        { label: "Confirm bilingual EN/ES copy needs", status: "Not started" }
+      ]
+    },
+    {
+      title: "Core Professional build",
+      subtitle: "Build the connected patient and internal workflow as one system.",
+      owner: "Tim",
+      status: "Not started",
+      progress: 0,
+      tasks: [
+        { label: "Patient web app foundation", status: "Not started" },
+        { label: "Booking / appointment request flow", status: "Not started" },
+        { label: "Forms and signatures flow", status: "Not started" },
+        { label: "Team dashboard / lobby workflow", status: "Not started" },
+        { label: "OpenDental read connection + local write database", status: "Not started" }
+      ]
+    },
+    {
+      title: "Working demo review",
+      subtitle: "Review the live workflow before production deployment.",
+      owner: "Clean Smiles + Tim",
+      status: "Not started",
+      progress: 0,
+      tasks: [
+        { label: "Demo link prepared", status: "Not started" },
+        { label: "Patient flow review", status: "Not started" },
+        { label: "Team workflow review", status: "Not started" },
+        { label: "Review notes captured", status: "Not started" },
+        { label: "Final launch adjustments approved", status: "Not started" }
+      ]
+    },
+    {
+      title: "Deployment & staff handoff",
+      subtitle: "Install, test, and hand the system to the clinic team.",
+      owner: "Tim",
+      status: "Not started",
+      progress: 0,
+      tasks: [
+        { label: "Deploy on clinic server", detail: "Self-hosted; no vendor subscription", status: "Not started" },
+        { label: "Run test bookings and check-ins", status: "Not started" },
+        { label: "Staff handoff / training notes", status: "Not started" },
+        { label: "Launch checklist completed", status: "Not started" }
+      ]
+    },
+    {
+      title: "Post-launch support",
+      subtitle: "Make sure the first two weeks after launch are covered.",
+      owner: "Tim",
+      status: "Included",
+      progress: 0,
+      tasks: [
+        { label: "14 days of bug fixes/support", status: "Included" },
+        { label: "Minor launch adjustments", status: "Included" },
+        { label: "Workflow questions after go-live", status: "Included" }
+      ]
+    }
+  ],
+  clientNeeds: [
+    { label: "Approve the Professional package at the adjusted fixed price", status: "Waiting on client" },
+    { label: "Approve the milestone payment structure", status: "Waiting on client" },
+    { label: "Confirm best staff contact for workflow review", status: "Pending" },
+    { label: "Provide server/OpenDental access only after kickoff", status: "Pending" }
+  ],
+  included: [
+    "Patient-facing web app and lobby-ready flow",
+    "Internal team workflow for appointments and arrivals",
+    "Self-hosted deployment on the clinic’s own server",
+    "OpenDental connection strategy using existing read access plus local write database",
+    "English / Spanish interface support",
+    "Staff handoff notes and 14 days of post-launch support"
+  ],
+  updates: [
+    {
+      date: "June 29, 2026",
+      title: "Professional project dashboard prepared",
+      body: "Client-facing dashboard created so Clean Smiles can track milestones, completed items, and next steps at any time."
+    },
+    {
+      date: "June 28, 2026",
+      title: "Professional price adjusted",
+      body: "Professional package discussed at an adjusted fixed price of $5,500 with milestone-based payments."
+    }
+  ]
+};
+
+  </script>
+  <script>
+(function () {
+  const STORAGE_KEY = "clean-smiles-professional-dashboard-draft-v1";
+  const app = document.getElementById("app");
+  const adminMode = new URLSearchParams(window.location.search).has("admin");
+
+  const statusOptions = [
+    "Waiting on approval",
+    "Waiting on client",
+    "Not started",
+    "In progress",
+    "Ready",
+    "Ready to invoice",
+    "Scheduled",
+    "Pending",
+    "Due",
+    "Paid",
+    "Done",
+    "Included",
+    "Blocked"
+  ];
+
+  const baseData = clone(window.DASHBOARD_DATA || {});
+  let data = loadData();
+
+  function clone(value) {
+    return JSON.parse(JSON.stringify(value || {}));
+  }
+
+  function loadData() {
+    if (!adminMode) return clone(baseData);
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : clone(baseData);
+    } catch (error) {
+      return clone(baseData);
+    }
+  }
+
+  function saveDraft() {
+    if (!adminMode) return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      // localStorage can fail in private browsing. The copy button still works.
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function normalizeStatus(value) {
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function chip(status) {
+    return `<span class="status-chip" data-status="${normalizeStatus(status)}">${escapeHtml(status)}</span>`;
+  }
+
+  function select(path, currentValue, options = statusOptions) {
+    const uniqueOptions = Array.from(new Set([currentValue, ...options].filter(Boolean)));
+    return `
+      <select class="admin-select" data-path="${escapeHtml(path)}" aria-label="Edit ${escapeHtml(path)}">
+        ${uniqueOptions.map((option) => `
+          <option value="${escapeHtml(option)}" ${option === currentValue ? "selected" : ""}>${escapeHtml(option)}</option>
+        `).join("")}
+      </select>
+    `;
+  }
+
+  function range(path, currentValue, label) {
+    const value = Number(currentValue || 0);
+    return `
+      <label>${escapeHtml(label)}: <strong>${value}%</strong></label>
+      <input class="admin-range" type="range" min="0" max="100" step="5" value="${value}" data-path="${escapeHtml(path)}" aria-label="${escapeHtml(label)}" />
+    `;
+  }
+
+  function progressBar(value) {
+    const safeValue = Math.max(0, Math.min(100, Number(value || 0)));
+    return `<div class="progress-bar" aria-label="${safeValue}% complete"><span style="width:${safeValue}%"></span></div>`;
+  }
+
+  function renderAdminPanel() {
+    if (!adminMode) return "";
+    return `
+      <section class="admin-panel" aria-label="Admin edit mode">
+        <h2>Admin edit mode</h2>
+        <p>Changes are local until you copy or download the updated <code>dashboard-data.js</code> file and commit it to GitHub Pages.</p>
+        <div class="admin-inline">
+          ${select("project.status", data.project.status)}
+          ${range("project.overallProgress", data.project.overallProgress, "Overall progress")}
+        </div>
+        <div class="admin-actions">
+          <button class="admin-button" type="button" data-action="copy-data">Copy dashboard-data.js</button>
+          <button class="admin-button" type="button" data-action="download-data">Download dashboard-data.js</button>
+          <button class="admin-button" type="button" data-action="reset-draft">Reset local draft</button>
+        </div>
+        <p class="copy-toast" id="copy-toast">Updated data copied. Replace <code>dashboard-data.js</code>, commit, and push.</p>
+        <textarea class="code-output" id="code-output" readonly spellcheck="false"></textarea>
+      </section>
+    `;
+  }
+
+  function renderHero() {
+    const project = data.project;
+    return `
+      ${renderAdminPanel()}
+      <section class="hero-grid" aria-labelledby="dashboard-title">
+        <div class="hero-panel">
+          <div class="kicker">${escapeHtml(project.preparedFor)}</div>
+          <h1 class="hero-title" id="dashboard-title">Professional build, <span>tracked</span> from approval to go-live.</h1>
+          <p class="hero-copy">A client-visible dashboard for the Clean Smiles Dental implementation: milestones, completed items, current owner, and the next step in one place.</p>
+          <div class="hero-meta" aria-label="Project summary">
+            <div class="meta-pill">
+              <small>Selected plan</small>
+              <strong>${escapeHtml(project.plan)}</strong>
+            </div>
+            <div class="meta-pill">
+              <small>Adjusted fixed price</small>
+              <strong>${escapeHtml(project.fixedPrice)}</strong>
+            </div>
+            <div class="meta-pill">
+              <small>Last updated</small>
+              <strong>${escapeHtml(project.lastUpdated)}</strong>
+            </div>
+          </div>
+        </div>
+
+        <aside class="status-panel" aria-labelledby="status-title">
+          <div class="status-top">
+            <div>
+              <div class="mono-label">Current status</div>
+              <h2 class="status-title" id="status-title">${escapeHtml(project.status)}</h2>
+            </div>
+            <div class="progress-ring" style="--value:${Number(project.overallProgress || 0)}" aria-label="Overall project progress ${Number(project.overallProgress || 0)} percent">
+              <span>${Number(project.overallProgress || 0)}%</span>
+            </div>
+          </div>
+          <div class="next-action">
+            <h2>Next action</h2>
+            <p>${escapeHtml(project.currentAction)}</p>
+          </div>
+          <ul class="status-list">
+            <li><span>Current milestone</span><strong>${escapeHtml(project.currentMilestone)}</strong></li>
+            <li><span>Launch timing</span><strong>${escapeHtml(project.launchTiming)}</strong></li>
+            <li><span>Original proposal</span><strong><a href="${escapeHtml(project.proposalUrl)}" target="_blank" rel="noreferrer">Open ↗</a></strong></li>
+          </ul>
+        </aside>
+      </section>
+    `;
+  }
+
+  function renderMilestones() {
+    return `
+      <section id="milestones" aria-labelledby="milestones-title">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Milestone payments</div>
+            <h2 id="milestones-title">Payment is tied to visible project progress.</h2>
+          </div>
+          <p>The project can be built as one complete system while payments are split into clean approval points.</p>
+        </div>
+        <div class="milestone-grid">
+          ${data.milestones.map((milestone, index) => `
+            <article class="card milestone-card" data-index="0${index + 1}">
+              <div class="card-header">
+                <div>
+                  <div class="mono-label">${escapeHtml(milestone.name)}</div>
+                  <h2>${escapeHtml(milestone.label)}</h2>
+                </div>
+                ${adminMode ? select(`milestones.${index}.status`, milestone.status) : chip(milestone.status)}
+              </div>
+              <div class="amount">${escapeHtml(milestone.amount)}</div>
+              <p class="card-copy">${escapeHtml(milestone.summary)}</p>
+              <div class="due">${escapeHtml(milestone.due)}</div>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderPhase(phase, phaseIndex) {
+    const active = phase.title === data.project.currentMilestone || /waiting|progress/i.test(phase.status);
+    return `
+      <article class="phase-card" data-active="${active ? "true" : "false"}">
+        <div class="phase-left">
+          <div>
+            <div class="mono-label">Phase ${phaseIndex + 1}</div>
+            <h3>${escapeHtml(phase.title)}</h3>
+          </div>
+          <p>${escapeHtml(phase.subtitle)}</p>
+          <div class="phase-meta">
+            ${adminMode ? select(`phases.${phaseIndex}.status`, phase.status) : chip(phase.status)}
+            <span class="status-chip" data-status="included">Owner: ${escapeHtml(phase.owner)}</span>
+          </div>
+          ${progressBar(phase.progress)}
+          ${adminMode ? `<div class="admin-inline">${range(`phases.${phaseIndex}.progress`, phase.progress, "Phase progress")}</div>` : ""}
+        </div>
+        <ul class="task-list">
+          ${phase.tasks.map((task, taskIndex) => `
+            <li class="task-item">
+              <div class="task-main">
+                <span class="task-title">${escapeHtml(task.label)}</span>
+                ${task.detail ? `<span class="task-detail">${escapeHtml(task.detail)}</span>` : ""}
+              </div>
+              ${adminMode ? select(`phases.${phaseIndex}.tasks.${taskIndex}.status`, task.status) : chip(task.status)}
+            </li>
+          `).join("")}
+        </ul>
+      </article>
+    `;
+  }
+
+  function renderWorkPlan() {
+    return `
+      <section id="work-plan" aria-labelledby="work-title">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Work plan</div>
+            <h2 id="work-title">Simple enough for the clinic. Specific enough to trust.</h2>
+          </div>
+          <p>Status is client-facing by design: no code noise, no credentials, no patient information.</p>
+        </div>
+        <div class="main-grid">
+          <div class="phase-stack">
+            ${data.phases.map((phase, index) => renderPhase(phase, index)).join("")}
+          </div>
+          <aside class="side-stack" aria-label="Client needs and included scope">
+            <div class="card side-card">
+              <h3>Needed from Clean Smiles</h3>
+              ${data.clientNeeds.map((item, index) => `
+                <div class="client-need">
+                  <span>${escapeHtml(item.label)}</span>
+                  ${adminMode ? select(`clientNeeds.${index}.status`, item.status) : chip(item.status)}
+                </div>
+              `).join("")}
+            </div>
+            <div class="card side-card">
+              <h3>Included in Professional</h3>
+              <ul class="included-list">
+                ${data.included.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+              </ul>
+            </div>
+            <div class="card side-card privacy-card">
+              <h3>Public-safe page</h3>
+              <p>${escapeHtml(data.project.privacyNote)}</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderUpdates() {
+    return `
+      <section id="updates" aria-labelledby="updates-title">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Updates</div>
+            <h2 id="updates-title">What changed recently.</h2>
+          </div>
+          <p>Use this section as the audit trail: what was completed, what changed, and what the clinic should expect next.</p>
+        </div>
+        <div class="updates-grid">
+          <div class="timeline">
+            ${data.updates.map((update) => `
+              <article class="card update-card">
+                <div class="update-date">${escapeHtml(update.date)}</div>
+                <div>
+                  <h3>${escapeHtml(update.title)}</h3>
+                  <p>${escapeHtml(update.body)}</p>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+          <div class="card side-card">
+            <h3>How to use this page</h3>
+            <ul class="included-list">
+              <li>Mark a task Done only when the client can understand the outcome.</li>
+              <li>Keep technical details in your internal repo, not on this page.</li>
+              <li>Every update should answer: what changed, who owns the next step, and what is waiting.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderFooter() {
+    return `
+      <footer class="footer-card">
+        <div>
+          <strong>${escapeHtml(data.project.owner)} · OpenDental & clinic automation</strong><br />
+          <small>${escapeHtml(data.project.preparedFor)}</small>
+        </div>
+        <a href="mailto:${escapeHtml(data.project.ownerEmail)}">${escapeHtml(data.project.ownerEmail)}</a>
+      </footer>
+    `;
+  }
+
+  function render() {
+    app.innerHTML = [
+      renderHero(),
+      renderMilestones(),
+      renderWorkPlan(),
+      renderUpdates(),
+      renderFooter()
+    ].join("");
+  }
+
+  function setByPath(target, path, value) {
+    const parts = path.split(".");
+    const last = parts.pop();
+    let cursor = target;
+    for (const part of parts) {
+      cursor = cursor[Number.isInteger(Number(part)) && part.trim() !== "" ? Number(part) : part];
+      if (!cursor) return;
+    }
+    const normalizedValue = /progress$/i.test(last || "") || last === "overallProgress" ? Number(value) : value;
+    cursor[last] = normalizedValue;
+  }
+
+  function dataFileText() {
+    return `window.DASHBOARD_DATA = ${JSON.stringify(data, null, 2)};\n`;
+  }
+
+  async function copyDataFile() {
+    const text = dataFileText();
+    const output = document.getElementById("code-output");
+    const toast = document.getElementById("copy-toast");
+    if (output) {
+      output.value = text;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      if (toast) toast.classList.add("visible");
+      if (output) output.classList.remove("visible");
+    } catch (error) {
+      if (output) output.classList.add("visible");
+      if (toast) {
+        toast.textContent = "Clipboard blocked. Copy the generated code from the text box below.";
+        toast.classList.add("visible");
+      }
+    }
+  }
+
+  function downloadDataFile() {
+    const blob = new Blob([dataFileText()], { type: "text/javascript" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "dashboard-data.js";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  app.addEventListener("change", (event) => {
+    const control = event.target.closest("[data-path]");
+    if (!control) return;
+    setByPath(data, control.dataset.path, control.value);
+    saveDraft();
+    render();
+  });
+
+  app.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-action]");
+    if (!action) return;
+    const type = action.dataset.action;
+    if (type === "copy-data") copyDataFile();
+    if (type === "download-data") downloadDataFile();
+    if (type === "reset-draft") {
+      window.localStorage.removeItem(STORAGE_KEY);
+      data = clone(baseData);
+      render();
+    }
+  });
+
+  render();
+})();
+
+  </script>
+</body>
+</html>
